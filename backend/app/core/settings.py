@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     # App
     APP_NAME: str = "SupFile"
     APP_VERSION: str = "1.0.0"
+    APP_SUMMARY : str = "A file hosting service."
+    APP_DESCRIPTION : str = "SupFile is a modern file hosting service that allows users to upload, share, and manage their files with ease and security."
     ENV: str = "dev"
     DEBUG: bool = True
 

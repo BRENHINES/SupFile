@@ -1,4 +1,7 @@
-from pydantic_settings import BaseSettings
+from pathlib import Path
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -11,16 +14,16 @@ class Settings(BaseSettings):
     DEBUG: bool = True
 
     # DB : PostgreSQL
-    database_url: str
-    sync_database_url: str
+    DATABASE_URL: str = Field(..., env="DATABASE_URL")
+    SYNC_DATABASE_URL: str = Field(..., env="SYNC_DATABASE_URL")
 
     # DB : MinIO
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
-        env_file_encoding = "utf-8"
-        extra = "ignore"
-        env_ignore_empty = True,
+    model_config = SettingsConfigDict(
+        env_file=str(Path(__file__).parent.parent / ".env"),
+        case_sensitive=False,
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
 
 settings = Settings()

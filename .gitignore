@@ -137,7 +137,7 @@ env.bak/
 venv.bak/
 
 # dotenv et secrets
-.env
+backend/.env
 
 # Spyder project settings
 .spyderproject

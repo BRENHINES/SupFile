@@ -1,11 +1,6 @@
-from datetime import datetime
+from fastapi import FastAPI
 
-from fastapi import FastAPI, Depends
-from sqlalchemy import create_engine, text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
-
-from .core.database import get_db
+from .api.v1.router import api_router
 from .core.settings import settings
 
 app = FastAPI(
@@ -17,7 +12,4 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-@app.get("/health", response_model_by_alias=True)
-def health_check(db: Session = Depends(get_db)):
-    db.execute(text("SELECT 1"))
-    return {"Health Status": "Database is healthy", "timestamp": datetime.now()}
+app.include_router(api_router)

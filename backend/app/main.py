@@ -1,16 +1,33 @@
-# This is a sample Python script.
+from datetime import datetime
 
-# Press ⌃F5 to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+from fastapi import FastAPI, Depends
+from sqlalchemy import create_engine, text
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, Session
+
+from .core.settings import settings
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press F9 to toggle the breakpoint.
+engine = create_engine(settings.database_url)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+Base = declarative_base()
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+app = FastAPI(
+    title=settings.APP_NAME,
+    version=settings.APP_VERSION,
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
+
+@app.get("/health", response_model_by_alias=True)
+def health_check(db: Session = Depends(get_db)):
+    db.execute(text("SELECT 1"))
+    return {"Health Status": "Database is healthy", "timestamp": datetime.now()}

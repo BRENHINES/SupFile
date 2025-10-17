@@ -23,9 +23,12 @@ propcache==0.4.1
 psycopg2-binary==2.9.11
 pyasn1==0.6.1
 pydantic==2.12.2
+pydantic-settings==2.11.0
 pydantic_core==2.41.4
 python-dateutil==2.9.0.post0
+python-dotenv==1.1.1
 python-jose==3.5.0
+python-multipart==0.0.20
 rsa==4.9.1
 s3transfer==0.14.0
 six==1.17.0

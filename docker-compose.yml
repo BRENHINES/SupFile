@@ -1,0 +1,33 @@
+services:
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - supfile_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@database:5432/${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET_KEY}
+    volumes:
+      - file_storage:/app/storage
+    depends_on:
+      - database
+    networks:
+      - supfile_network
+    ports:
+      - "8000:8000"
+
+volumes:
+  db_data:
+  file_storage:
+networks:
+  supfile_network:

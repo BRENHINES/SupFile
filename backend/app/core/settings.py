@@ -3,6 +3,9 @@ from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+ENV_FILE = BASE_DIR / ".env"
+
 
 class Settings(BaseSettings):
     # App
@@ -20,7 +23,7 @@ class Settings(BaseSettings):
     # DB : MinIO
 
     model_config = SettingsConfigDict(
-        env_file=str(Path(__file__).parent.parent / ".env"),
+        env_file=str(ENV_FILE),
         case_sensitive=False,
         env_file_encoding="utf-8",
         extra="ignore"
